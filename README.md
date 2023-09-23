@@ -9,5 +9,5 @@ I created pop-ups to show the Magnitude, Location, and Depth of the correspondin
 </div>
 Lastly, I created a legend to outline the different colors and the depths that correspond to them.
 <div align="center">
-  ![legend](images/your_image.png)
+  ![legend](https://github.com/mgtaylor119/leaflet-challenge/blob/main/Leaflet-Part-1/images/legend.png?raw=true)
 </div>
