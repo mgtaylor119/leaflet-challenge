@@ -53,7 +53,8 @@ d3.json(url).then(function (data) {
             circleMarker.setStyle({fillColor: "#2AF612"})
         } 
           
-          circleMarker.bindPopup(data.features[i].properties.title);
+        circleMarker.bindPopup(`<strong>Magnitude:</strong> ${data.features[i].properties.mag}
+            <br><strong>Location:</strong> ${data.features[i].properties.place}<br><strong>Depth:</strong> ${depth}`);
           markers.addLayer(circleMarker);
         }
       }
