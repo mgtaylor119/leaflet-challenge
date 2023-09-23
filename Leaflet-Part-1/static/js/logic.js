@@ -1,43 +1,15 @@
 let myMap = L.map("map", {
     center: [39.8283, -98.5795],
-    zoom: 4, 
+    zoom: 5, 
   });
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(myMap);
 
-
-
 let url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
 
 d3.json(url).then(function (data) {
-    // console.log(data.features);
-    // console.log(data.features.length)
-
-    let minDepth = 1000; 
-    let maxDepth = -1000; 
-
-for (let i = 0; i < data.features.length; i++) {
-  let depth = data.features[i].geometry.coordinates[2];
-
-  if (depth < minDepth) {
-    minDepth = depth;
-  }
-
-  if (depth > maxDepth) {
-    maxDepth = depth;
-  }
-}
-
-console.log("Smallest Depth:", minDepth);
-console.log("Largest Depth:", maxDepth);
-
-// let colorScale = d3.scaleSequential(d3.interpolateHslLong("green", "red"))
-//   .domain([minDepth, maxDepth])
-//   .nice(6);
-
-    // interpolateRdYlGn
 
   let radiusScale = d3.scaleQuantize()
   .domain([0, 6]) 
@@ -45,24 +17,18 @@ console.log("Largest Depth:", maxDepth);
 
     let markers = L.layerGroup();
 
-    // Loop through the data.
     for (let i = 0; i < data.features.length; i++) {
   
-      // Set the data location property to a variable.
       let location = data.features[i].geometry;
-        // console.log(location);
-      // Check for the location property.
       if (location) {
         let mag = data.features[i].properties.mag;
         let depth = data.features[i].geometry.coordinates[2]; 
         
         let radius = radiusScale(mag);
-        // let color = colorScale(depth);
   
-        // Add a new marker to the cluster group, and bind a popup.
+
         let circleMarker = L.circleMarker([location.coordinates[1], location.coordinates[0]], {
             radius: radius,
-            // fillColor: circleColor,
             fillOpacity: 0.6,
             color: 'black',
             weight: 1
@@ -92,45 +58,50 @@ console.log("Largest Depth:", maxDepth);
         }
       }
   
-    // Add our marker cluster layer to the map.
+      let legend = L.control({ position: 'bottomright' });
+
+      legend.onAdd = function (map) {
+        let div = L.DomUtil.create('div', 'legend');
+        div.innerHTML = `
+        <div class="legend-item">
+           <div class="color-box" style="background-color: #2AF612;"></div>
+           <div class="legend-label">-10-10</div>
+        </div>
+        <div class="legend-item">
+           <div class="color-box" style="background-color: #CDF612;"></div>
+           <div class="legend-label">10-30</div>
+        </div>
+        <div class="legend-item">
+           <div class="color-box" style="background-color: #F6D312;"></div>
+           <div class="legend-label">30-50</div>
+        </div>
+        <div class="legend-item">
+           <div class="color-box" style="background-color: #F6B112;"></div>
+           <div class="legend-label">50-70</div>
+        </div>
+        <div class="legend-item">
+           <div class="color-box" style="background-color: #F18C84;"></div>
+           <div class="legend-label">70-90</div>
+        </div>
+        <div class="legend-item">
+           <div class="color-box" style="background-color: #F73906;"></div>
+           <div class="legend-label">90+</div>
+        </div>
+        `;
+      
+        div.style.backgroundColor = 'white';
+        div.style.padding = '10px';
+        div.style.border = '1px solid #ccc';
+        div.style.fontFamily = 'Arial, sans-serif';
+        div.style.fontSize = '12px';
+      
+        return div;
+      };
+      
+      legend.addTo(myMap);
     myMap.addLayer(markers);
   
 });
 
 
-//     createFeatures(data.features);
 
-// });
-
-// function createFeatures(earthquakeData) {
-//     function onEachFeature(feature,layer){
-//       layer.bindPopup(`<h3>${feature.properties.place}</h3><hr><p>${new Date(feature.properties.time)}</p>`);
-//     }
-//     let earthquakes = L.geoJSON(earthquakeData,{onEachFeature:onEachFeature});
-
-
-//     createMap(earthquakes);
-//   }
-
-//   function createMap(earthquakes) {
-
-//     let street = 
-  
-//     let topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-//       attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
-//     });
-  
-//     let baseMaps = {
-//       "Street Map": street,
-//       "Topographic Map": topo
-//     };
-  
-//     let overlayMaps = {Earthquakes: earthquakes};
-
-    
-
-
-
-//     L.control.layers(baseMaps,overlayMaps, {
-//         collapsed: false
-//       }).addTo(myMap);
