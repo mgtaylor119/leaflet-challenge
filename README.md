@@ -5,7 +5,7 @@ Using the USGS GeoJSON Feed, I selected ["All Earthquakes from the Past 7 Days"]
 </p>
 I created pop-ups to show the Magnitude, Location, and Depth of the corresponding earthquake. 
 <p align="center">
-  <img src="" alt="pop-up">
+  <img src="https://github.com/mgtaylor119/leaflet-challenge/blob/main/Leaflet-Part-1/images/popup.png?raw=true" alt="pop-up">
 </p>
 Lastly, I created a legend to outline the different colors and the depths that correspond to them.
 <p align="center">
